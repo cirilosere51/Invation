@@ -114,42 +114,29 @@ const minuteUnit = document.querySelector<HTMLElement>('[data-unit="minutes"]')
 const secondUnit = document.querySelector<HTMLElement>('[data-unit="seconds"]')
 const confirmAttendanceBtn = document.querySelector<HTMLButtonElement>('#confirmAttendanceBtn')
 
-const weddingStart = new Date('2026-10-26T16:00:00+08:00')
-const weddingEnd = new Date('2026-10-26T21:00:00+08:00')
+// The event lives in public/wedding.ics; keep it in sync with targetDate above.
+const calendarFileUrl = '/wedding.ics'
 
-const formatIcsDate = (date: Date) => {
-  return date
-    .toISOString()
-    .replace(/[-:]/g, '')
-    .replace(/\.\d{3}Z$/, 'Z')
-}
-
-const addToGoogleCalendar = () => {
-  const googleCalendarUrl = new URL('https://calendar.google.com/calendar/render')
-  googleCalendarUrl.searchParams.set('action', 'TEMPLATE')
-  googleCalendarUrl.searchParams.set('text', 'Gembert Walog & Princess Torreon Wedding')
-  googleCalendarUrl.searchParams.set('details', 'A special day of love, celebration, and unforgettable memories.')
-  googleCalendarUrl.searchParams.set('location', 'Buyog, Getafe, Bohol')
-  googleCalendarUrl.searchParams.set('dates', `${formatIcsDate(weddingStart)}/${formatIcsDate(weddingEnd)}`)
-
-  window.open(googleCalendarUrl.toString(), '_blank', 'noopener,noreferrer')
-}
-
-// Navigating to a real .ics URL (public/wedding.ics) makes iOS show its native "Add to Calendar"
-// sheet, and also works inside in-app browsers like Messenger where blob downloads are blocked.
-// Keep its details in sync with weddingStart/weddingEnd above.
-const openCalendarFile = () => {
-  window.location.href = '/wedding.ics'
-}
-
-// Apple devices open .ics files straight in the Calendar app; everyone else gets Google Calendar
+// Apple devices show the native "Add to Calendar" sheet when navigating to the .ics URL
+// (this also works inside in-app browsers like Messenger)
 const isAppleDevice = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent)
+
+// Android and Windows/Linux save the .ics, which opens in the device's default calendar app
+// (Samsung Calendar, Outlook, Windows Calendar, ...)
+const downloadCalendarFile = () => {
+  const link = document.createElement('a')
+  link.href = calendarFileUrl
+  link.download = 'gembert-princess-wedding.ics'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
 
 const addToCalendar = () => {
   if (isAppleDevice) {
-    openCalendarFile()
+    window.location.href = calendarFileUrl
   } else {
-    addToGoogleCalendar()
+    downloadCalendarFile()
   }
 
   if (confirmAttendanceBtn) {
