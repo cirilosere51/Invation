@@ -92,7 +92,7 @@ app.innerHTML = `
 
       <section class="info-card rsvp-card">
         <p class="section-label">RSVP</p>
-        <p class="rsvp-copy">We would love to celebrate with you. Kindly confirm your presence by the 22nd of October.</p>
+        <p class="rsvp-copy">We would love to celebrate with you. Kindly confirm your presence by 22nd of October.</p>
         <div class="cta-row">
           <button type="button" class="primary-btn" id="confirmAttendanceBtn">Confirm Attendance</button>
           <a class="secondary-btn" href="https://www.google.com/maps/place/Buyog,+Getafe,+Bohol/@10.1088182,124.1417948,15z/data=!3m1!4b1!4m6!3m5!1s0x33a9f4be14c4b511:0x4046993408ffe5fb!8m2!3d10.1104933!4d124.1559762!16s%2Fg%2F11f0wlp_gv?entry=ttu&g_ep=EgoyMDI2MTAxMy4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noreferrer">Get Directions</a>
