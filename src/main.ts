@@ -124,55 +124,22 @@ const formatIcsDate = (date: Date) => {
     .replace(/\.\d{3}Z$/, 'Z')
 }
 
-const buildIcsContent = () => {
-  const eventTitle = 'Gembert Walog & Princess Torreon Wedding'
-  const eventLocation = 'The Garden Villa, Makati'
-  const eventDescription = 'A special day of love, celebration, and unforgettable memories.'
-
-  return [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'PRODID:-//Gembert & Princess Wedding//EN',
-    'BEGIN:VEVENT',
-    `UID:${Date.now()}@wedding-invitation`,
-    `DTSTAMP:${formatIcsDate(new Date())}`,
-    `DTSTART:${formatIcsDate(weddingStart)}`,
-    `DTEND:${formatIcsDate(weddingEnd)}`,
-    `SUMMARY:${eventTitle}`,
-    `DESCRIPTION:${eventDescription}`,
-    `LOCATION:${eventLocation}`,
-    'BEGIN:VALARM',
-    'ACTION:DISPLAY',
-    'DESCRIPTION:Wedding tomorrow',
-    'TRIGGER:-P1D',
-    'END:VALARM',
-    'END:VEVENT',
-    'END:VCALENDAR',
-  ].join('\r\n')
-}
-
 const addToGoogleCalendar = () => {
   const googleCalendarUrl = new URL('https://calendar.google.com/calendar/render')
   googleCalendarUrl.searchParams.set('action', 'TEMPLATE')
   googleCalendarUrl.searchParams.set('text', 'Gembert Walog & Princess Torreon Wedding')
   googleCalendarUrl.searchParams.set('details', 'A special day of love, celebration, and unforgettable memories.')
-  googleCalendarUrl.searchParams.set('location', 'The Garden Villa, Makati')
+  googleCalendarUrl.searchParams.set('location', 'Buyog, Getafe, Bohol')
   googleCalendarUrl.searchParams.set('dates', `${formatIcsDate(weddingStart)}/${formatIcsDate(weddingEnd)}`)
 
   window.open(googleCalendarUrl.toString(), '_blank', 'noopener,noreferrer')
 }
 
-const downloadCalendarFile = () => {
-  const calendarContent = buildIcsContent()
-  const blob = new Blob([calendarContent], { type: 'text/calendar;charset=utf-8' })
-  const fileUrl = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = fileUrl
-  link.download = 'gembert-princess-wedding.ics'
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-  URL.revokeObjectURL(fileUrl)
+// Navigating to a real .ics URL (public/wedding.ics) makes iOS show its native "Add to Calendar"
+// sheet, and also works inside in-app browsers like Messenger where blob downloads are blocked.
+// Keep its details in sync with weddingStart/weddingEnd above.
+const openCalendarFile = () => {
+  window.location.href = '/wedding.ics'
 }
 
 // Apple devices open .ics files straight in the Calendar app; everyone else gets Google Calendar
@@ -180,7 +147,7 @@ const isAppleDevice = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent)
 
 const addToCalendar = () => {
   if (isAppleDevice) {
-    downloadCalendarFile()
+    openCalendarFile()
   } else {
     addToGoogleCalendar()
   }

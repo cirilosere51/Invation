@@ -1,0 +1,20 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Gembert & Princess Wedding//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:gembert-princess-wedding-20261026@invation-five.vercel.app
+DTSTAMP:20261017T000000Z
+DTSTART:20261026T080000Z
+DTEND:20261026T130000Z
+SUMMARY:Gembert Walog & Princess Torreon Wedding
+DESCRIPTION:A special day of love\, celebration\, and unforgettable memories.
+LOCATION:Buyog\, Getafe\, Bohol
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Wedding tomorrow
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+END:VCALENDAR
