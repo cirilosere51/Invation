@@ -19,7 +19,7 @@ app.innerHTML = `
       </div>
 
       <p class="eyebrow">You are warmly invited to celebrate</p>
-      <h1>Gembert Walog <span>&</span> Princess Torreon</h1>
+      <h1><span>Gembert Walog</span><span class="amp">&</span><span>Princess Torreon</span></h1>
       <p class="tagline">Together with their families, they invite you to witness their vows and share in their joy.</p>
 
       <div class="date-panel" id="datePanel" role="button" tabindex="0" title="Add to calendar" aria-label="Add the wedding to your calendar">
