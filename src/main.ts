@@ -20,7 +20,7 @@ app.innerHTML = `
 
       <p class="eyebrow">You are warmly invited to celebrate</p>
       <h1><span>Gembert Walog</span><span class="amp">&</span><span>Princess Torreon</span></h1>
-      <p class="tagline">Together with their families, they invite you to witness their vows and share in their joy.</p>
+      <p class="tagline">Together with our families, we invite you to witness our vows and share our joy.</p>
 
       <div class="date-panel" id="datePanel" role="button" tabindex="0" title="Add to calendar" aria-label="Add the wedding to your calendar">
         <div class="date-part">
@@ -31,7 +31,7 @@ app.innerHTML = `
 
         <div class="details-part">
           <span class="time">4:00 PM onwards</span>
-          <span class="venue">The Garden Villa, Makati</span>
+          <span class="venue">Getafe Poblacion Ambacon</span>
         </div>
       </div>
     </header>
@@ -105,6 +105,11 @@ app.innerHTML = `
       <strong>Gembert Walog & Princess Torreon</strong>
     </footer>
   </div>
+
+  <audio id="bgMusic" src="/music.mp3" loop preload="none"></audio>
+  <button type="button" class="music-toggle" id="musicToggle" aria-label="Play background music" aria-pressed="false">
+    <span aria-hidden="true">♪</span>
+  </button>
 `
 
 const countdownRoot = document.querySelector<HTMLElement>('[data-countdown]')
@@ -181,6 +186,43 @@ const updateCountdown = () => {
 
 updateCountdown()
 setInterval(updateCountdown, 1000)
+
+// Background music: browsers block autoplay with sound, so start on the guest's first tap/keypress
+const bgMusic = document.querySelector<HTMLAudioElement>('#bgMusic')
+const musicToggle = document.querySelector<HTMLButtonElement>('#musicToggle')
+
+const setMusicState = (playing: boolean) => {
+  musicToggle?.classList.toggle('playing', playing)
+  musicToggle?.setAttribute('aria-pressed', String(playing))
+  musicToggle?.setAttribute('aria-label', playing ? 'Pause background music' : 'Play background music')
+}
+
+const playMusic = () => {
+  if (!bgMusic) return
+  bgMusic.volume = 0.5
+  bgMusic.play().then(() => setMusicState(true)).catch(() => setMusicState(false))
+}
+
+const startMusicOnFirstInteraction = (event: Event) => {
+  document.removeEventListener('pointerdown', startMusicOnFirstInteraction)
+  document.removeEventListener('keydown', startMusicOnFirstInteraction)
+  // The toggle button handles its own click
+  if (musicToggle?.contains(event.target as Node)) return
+  playMusic()
+}
+
+document.addEventListener('pointerdown', startMusicOnFirstInteraction)
+document.addEventListener('keydown', startMusicOnFirstInteraction)
+
+musicToggle?.addEventListener('click', () => {
+  if (!bgMusic) return
+  if (bgMusic.paused) {
+    playMusic()
+  } else {
+    bgMusic.pause()
+    setMusicState(false)
+  }
+})
 
 const petals = document.querySelector<HTMLDivElement>('.petals')
 
